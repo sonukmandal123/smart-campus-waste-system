@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Campus Waste System - Login</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="auth-body">
+  <div class="circles">
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+  </div>
+
+  <div class="glass-container auth-container">
+    <div class="auth-header">
+      <i class="fa-solid fa-leaf text-gradient"></i>
+      <h2>EcoCampus</h2>
+      <p>Waste Management System</p>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="active" id="tab-login">Login</button>
+      <button id="tab-signup">Sign Up</button>
+    </div>
+
+    <!-- Login Form -->
+    <form id="login-form" class="auth-form active-form">
+      <div class="input-group">
+        <i class="fa-solid fa-envelope"></i>
+        <input type="email" id="login-email" placeholder="Email Address" required>
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" id="login-password" placeholder="Password" required>
+      </div>
+      <button type="submit" class="btn-primary">Sign In</button>
+      <div id="login-error" class="error-text"></div>
+    </form>
+
+    <!-- Sign Up Form -->
+    <form id="signup-form" class="auth-form" style="display: none;">
+      <div class="input-group">
+        <i class="fa-solid fa-envelope"></i>
+        <input type="email" id="signup-email" placeholder="Email Address" required>
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" id="signup-password" placeholder="Password (Min 6 chars)" required>
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-user-shield"></i>
+        <select id="signup-role">
+          <option value="staff">Staff Member</option>
+          <option value="admin">Administrator</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-primary">Create Account</button>
+      <div id="signup-error" class="error-text"></div>
+    </form>
+  </div>
+
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>
