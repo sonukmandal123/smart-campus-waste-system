@@ -30,7 +30,7 @@ const btnAddBin = document.getElementById('btn-add-bin');
 const btnCloseModal = document.getElementById('btn-close-modal');
 const addBinForm = document.getElementById('add-bin-form');
 
-const API_BASE = 'http://localhost:3000/api';
+const API_BASE = 'https://smart-campus-waste-system.onrender.com';
 let currentUserRole = 'staff';
 let binsData = [];
 let fillInterval;
@@ -41,41 +41,41 @@ onAuthStateChanged(auth, async (user) => {
     window.location.href = 'auth.html';
     return;
   }
-  
+
   userEmailEl.textContent = user.email;
-  
+
   try {
     const userDoc = await getDoc(doc(db, 'users', user.uid));
     if (userDoc.exists()) {
       const data = userDoc.data();
       currentUserRole = data.role || 'staff';
       userRoleEl.textContent = currentUserRole.charAt(0).toUpperCase() + currentUserRole.slice(1);
-      
+
       if (currentUserRole === 'admin') {
         userRoleEl.classList.add('admin');
         adminControls.style.display = 'block';
-        if(navAnalytics) navAnalytics.style.display = 'flex';
+        if (navAnalytics) navAnalytics.style.display = 'flex';
       }
-      
+
       // Profile enhancements
-      if(data.displayName) {
+      if (data.displayName) {
         userEmailEl.textContent = data.displayName;
         const inputName = document.getElementById('profile-display-name');
-        if(inputName) inputName.value = data.displayName;
+        if (inputName) inputName.value = data.displayName;
       }
-      if(data.avatarBase64) {
+      if (data.avatarBase64) {
         const topImg = document.getElementById('topbar-avatar-img');
         const topIcon = document.getElementById('topbar-avatar-icon');
         const prevImg = document.getElementById('profile-img-preview');
         const prevIcon = document.getElementById('profile-placeholder-icon');
-        
-        if(topImg) { topImg.src = data.avatarBase64; topImg.style.display = 'block'; }
-        if(topIcon) topIcon.style.display = 'none';
-        
-        if(prevImg) { prevImg.src = data.avatarBase64; prevImg.style.display = 'block'; }
-        if(prevIcon) prevIcon.style.display = 'none';
-        
-        if(typeof currentProfileBase64 !== 'undefined') currentProfileBase64 = data.avatarBase64;
+
+        if (topImg) { topImg.src = data.avatarBase64; topImg.style.display = 'block'; }
+        if (topIcon) topIcon.style.display = 'none';
+
+        if (prevImg) { prevImg.src = data.avatarBase64; prevImg.style.display = 'block'; }
+        if (prevIcon) prevIcon.style.display = 'none';
+
+        if (typeof currentProfileBase64 !== 'undefined') currentProfileBase64 = data.avatarBase64;
       }
     }
   } catch (error) {
@@ -84,9 +84,9 @@ onAuthStateChanged(auth, async (user) => {
 
   // Load Bins after auth
   loadBins();
-  
+
   // Start random simulation
-  if(!fillInterval) fillInterval = setInterval(simulateBinFill, 5000); // Ticks every 5 seconds
+  if (!fillInterval) fillInterval = setInterval(simulateBinFill, 5000); // Ticks every 5 seconds
 });
 
 btnLogout.addEventListener('click', () => {
@@ -97,89 +97,89 @@ btnLogout.addEventListener('click', () => {
 navDashboard.addEventListener('click', (e) => {
   e.preventDefault();
   navDashboard.classList.add('active'); navGuide.classList.remove('active');
-  if(navDetection) navDetection.classList.remove('active');
-  if(navAnalytics) navAnalytics.classList.remove('active');
-  if(navProfile) navProfile.classList.remove('active');
-  
+  if (navDetection) navDetection.classList.remove('active');
+  if (navAnalytics) navAnalytics.classList.remove('active');
+  if (navProfile) navProfile.classList.remove('active');
+
   viewDashboard.style.display = 'block'; viewGuide.style.display = 'none';
-  if(viewDetection) viewDetection.style.display = 'none';
-  if(viewAnalytics) viewAnalytics.style.display = 'none';
-  if(viewProfile) viewProfile.style.display = 'none';
-  
+  if (viewDetection) viewDetection.style.display = 'none';
+  if (viewAnalytics) viewAnalytics.style.display = 'none';
+  if (viewProfile) viewProfile.style.display = 'none';
+
   document.getElementById('page-title').textContent = 'Dashboard Overview';
   document.getElementById('page-subtitle').textContent = 'Monitor campus waste bins in real-time.';
-  if(currentUserRole === 'admin') adminControls.style.display = 'block';
+  if (currentUserRole === 'admin') adminControls.style.display = 'block';
 });
 
-if(navDetection) {
+if (navDetection) {
   navDetection.addEventListener('click', (e) => {
     e.preventDefault();
     navDetection.classList.add('active'); navDashboard.classList.remove('active'); navGuide.classList.remove('active');
-    if(navAnalytics) navAnalytics.classList.remove('active');
-    if(navProfile) navProfile.classList.remove('active');
-    
+    if (navAnalytics) navAnalytics.classList.remove('active');
+    if (navProfile) navProfile.classList.remove('active');
+
     viewDetection.style.display = 'block'; viewDashboard.style.display = 'none'; viewGuide.style.display = 'none';
-    if(viewAnalytics) viewAnalytics.style.display = 'none';
-    if(viewProfile) viewProfile.style.display = 'none';
-    
+    if (viewAnalytics) viewAnalytics.style.display = 'none';
+    if (viewProfile) viewProfile.style.display = 'none';
+
     document.getElementById('page-title').textContent = 'Waste Detection';
     document.getElementById('page-subtitle').textContent = 'Upload an image of your garbage for AI classification.';
     adminControls.style.display = 'none';
   });
 }
 
-if(navAnalytics) {
+if (navAnalytics) {
   navAnalytics.addEventListener('click', (e) => {
     e.preventDefault();
     navAnalytics.classList.add('active'); navDashboard.classList.remove('active'); navGuide.classList.remove('active');
-    if(navDetection) navDetection.classList.remove('active');
-    if(navProfile) navProfile.classList.remove('active');
-    
+    if (navDetection) navDetection.classList.remove('active');
+    if (navProfile) navProfile.classList.remove('active');
+
     viewAnalytics.style.display = 'block'; viewDashboard.style.display = 'none'; viewGuide.style.display = 'none';
-    if(viewDetection) viewDetection.style.display = 'none';
-    if(viewProfile) viewProfile.style.display = 'none';
-    
+    if (viewDetection) viewDetection.style.display = 'none';
+    if (viewProfile) viewProfile.style.display = 'none';
+
     document.getElementById('page-title').textContent = 'Analytics Dashboard';
     document.getElementById('page-subtitle').textContent = 'Visual insights into campus waste management.';
     adminControls.style.display = 'none';
   });
 }
 
-if(navProfile) {
+if (navProfile) {
   navProfile.addEventListener('click', (e) => {
-    if(e) e.preventDefault();
+    if (e) e.preventDefault();
     navProfile.classList.add('active'); navDashboard.classList.remove('active'); navGuide.classList.remove('active');
-    if(navDetection) navDetection.classList.remove('active');
-    if(navAnalytics) navAnalytics.classList.remove('active');
-    
+    if (navDetection) navDetection.classList.remove('active');
+    if (navAnalytics) navAnalytics.classList.remove('active');
+
     viewProfile.style.display = 'block'; viewDashboard.style.display = 'none'; viewGuide.style.display = 'none';
-    if(viewDetection) viewDetection.style.display = 'none';
-    if(viewAnalytics) viewAnalytics.style.display = 'none';
-    
+    if (viewDetection) viewDetection.style.display = 'none';
+    if (viewAnalytics) viewAnalytics.style.display = 'none';
+
     document.getElementById('page-title').textContent = 'My Profile Settings';
     document.getElementById('page-subtitle').textContent = 'Update your personal information and avatar.';
     adminControls.style.display = 'none';
   });
 }
 
-if(topbarAvatarContainer) {
+if (topbarAvatarContainer) {
   topbarAvatarContainer.addEventListener('click', () => {
-    if(navProfile) navProfile.click();
+    if (navProfile) navProfile.click();
   });
 }
 
 navGuide.addEventListener('click', (e) => {
   e.preventDefault();
   navGuide.classList.add('active'); navDashboard.classList.remove('active');
-  if(navDetection) navDetection.classList.remove('active');
-  if(navAnalytics) navAnalytics.classList.remove('active');
-  if(navProfile) navProfile.classList.remove('active');
-  
+  if (navDetection) navDetection.classList.remove('active');
+  if (navAnalytics) navAnalytics.classList.remove('active');
+  if (navProfile) navProfile.classList.remove('active');
+
   viewGuide.style.display = 'grid'; viewDashboard.style.display = 'none';
-  if(viewDetection) viewDetection.style.display = 'none';
-  if(viewAnalytics) viewAnalytics.style.display = 'none';
-  if(viewProfile) viewProfile.style.display = 'none';
-  
+  if (viewDetection) viewDetection.style.display = 'none';
+  if (viewAnalytics) viewAnalytics.style.display = 'none';
+  if (viewProfile) viewProfile.style.display = 'none';
+
   document.getElementById('page-title').textContent = 'Waste Guide';
   document.getElementById('page-subtitle').textContent = 'Learn about proper waste segregation.';
   adminControls.style.display = 'none';
@@ -212,25 +212,25 @@ function loadBins() {
 function renderBins() {
   binsContainer.innerHTML = '';
   let criticalCount = 0;
-  
+
   if (binsData.length === 0) {
     binsContainer.innerHTML = '<div class="loading-text">No bins found. Admins can add new bins.</div>';
     statTotal.textContent = 0;
     statCritical.textContent = 0;
     return;
   }
-  
+
   // Sort bins: Critical first
   const sortedBins = [...binsData].sort((a, b) => b.fillLevel - a.fillLevel);
-  
+
   sortedBins.forEach(bin => {
     if (bin.fillLevel > 80) criticalCount++;
-    
+
     // Status Logic
     let statusClass = 'status-empty';
     if (bin.fillLevel > 80) statusClass = 'status-full';
     else if (bin.fillLevel > 30) statusClass = 'status-moderate';
-    
+
     const isWet = bin.type === 'Wet';
     const isAdmin = currentUserRole === 'admin';
     const adminHtml = isAdmin ? `
@@ -242,7 +242,7 @@ function renderBins() {
           <i class="fa-solid fa-trash" style="font-size: 1rem;"></i>
         </button>
       </div>` : '';
-    
+
     const card = document.createElement('div');
     card.className = `bin-card ${statusClass}`;
     card.innerHTML = `
@@ -265,7 +265,7 @@ function renderBins() {
     `;
     binsContainer.appendChild(card);
   });
-  
+
   statTotal.textContent = binsData.length;
   statCritical.textContent = criticalCount;
 
@@ -311,7 +311,7 @@ async function updateBinFill(id, fillLevel) {
       body: JSON.stringify({ fillLevel })
     });
     const updatedBin = await res.json();
-    
+
     // Update local state without full reload for smoothness
     const index = binsData.findIndex(b => b.id === id);
     if (index !== -1) {
@@ -334,11 +334,11 @@ addBinForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const location = document.getElementById('bin-location').value;
   const type = document.getElementById('bin-type').value;
-  
+
   const submitBtn = document.getElementById('btn-submit-bin');
   submitBtn.disabled = true;
   submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Adding...';
-  
+
   try {
     await fetch(`${API_BASE}/bins`, {
       method: 'POST',
@@ -371,11 +371,11 @@ if (btnCloseEditModal) {
     const id = document.getElementById('edit-bin-id').value;
     const location = document.getElementById('edit-bin-location').value;
     const type = document.getElementById('edit-bin-type').value;
-    
+
     const submitBtn = document.getElementById('btn-submit-edit-bin');
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
-    
+
     try {
       await fetch(`${API_BASE}/bins/${id}`, {
         method: 'PATCH',
@@ -402,7 +402,7 @@ let currentProfileBase64 = null;
 
 if (profilePreviewContainer) {
   profilePreviewContainer.addEventListener('click', () => profileImageUpload.click());
-  
+
   profileImageUpload.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith('image/')) {
@@ -418,7 +418,7 @@ if (profilePreviewContainer) {
           canvas.height = img.height * scaleSize;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          
+
           currentProfileBase64 = canvas.toDataURL('image/jpeg', 0.8);
           profileImgPreview.src = currentProfileBase64;
           profileImgPreview.style.display = 'block';
@@ -439,17 +439,17 @@ if (profilePreviewContainer) {
       btnSaveProfile.disabled = true;
       try {
         const user = auth.currentUser;
-        if(user) {
+        if (user) {
           const updates = {};
-          if(displayName) updates.displayName = displayName;
-          if(currentProfileBase64) updates.avatarBase64 = currentProfileBase64;
+          if (displayName) updates.displayName = displayName;
+          if (currentProfileBase64) updates.avatarBase64 = currentProfileBase64;
           await updateDoc(doc(db, 'users', user.uid), updates);
-          
+
           profileMsg.textContent = 'Profile saved successfully!';
           profileMsg.style.color = 'var(--status-green)';
-          
-          if(displayName) userEmailEl.textContent = displayName;
-          if(currentProfileBase64) {
+
+          if (displayName) userEmailEl.textContent = displayName;
+          if (currentProfileBase64) {
             document.getElementById('topbar-avatar-img').src = currentProfileBase64;
             document.getElementById('topbar-avatar-img').style.display = 'block';
             document.getElementById('topbar-avatar-icon').style.display = 'none';
@@ -472,15 +472,15 @@ let alertedBins = new Set(); // Prevent spamming alerts
 
 async function simulateBinFill() {
   if (binsData.length === 0) return;
-  
+
   // Pick a random bin to fill
   const randomIndex = Math.floor(Math.random() * binsData.length);
   let bin = binsData[randomIndex];
-  
+
   if (bin.fillLevel < 100) {
     // Increase by 5 to 15 percent
     let newFill = Math.min(100, bin.fillLevel + Math.floor(Math.random() * 11) + 5);
-    
+
     // Fire and forget update
     fetch(`${API_BASE}/bins/${bin.id}`, {
       method: 'PATCH',
@@ -489,7 +489,7 @@ async function simulateBinFill() {
     }).then(res => res.json()).then(updatedBin => {
       binsData[randomIndex] = updatedBin;
       renderBins();
-      
+
       // Alert when newly crosses 80
       if (updatedBin.fillLevel > 80 && !alertedBins.has(updatedBin.id)) {
         alertedBins.add(updatedBin.id);
@@ -506,7 +506,7 @@ function showAlert(message) {
   alertEl.className = 'alert';
   alertEl.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> <span>${message}</span>`;
   alertContainer.appendChild(alertEl);
-  
+
   setTimeout(() => {
     alertEl.style.opacity = '0';
     alertEl.style.transition = 'opacity 0.3s ease';
@@ -532,28 +532,28 @@ function sortBinsByPriority(fullBins) {
 function renderPriorityList() {
   const priorityContainer = document.getElementById('priority-list');
   const section = document.getElementById('priority-section');
-  if(!priorityContainer || !section) return;
-  
+  if (!priorityContainer || !section) return;
+
   const fullBins = filterFullBins();
   if (fullBins.length === 0) {
     section.style.display = 'none';
     return;
   }
-  
+
   section.style.display = 'block';
   priorityContainer.innerHTML = '';
-  
+
   const sortedBins = sortBinsByPriority(fullBins);
-  
+
   sortedBins.forEach((bin, index) => {
     // Flag bin as red/top-priority if it reaches 100% full
     const isCriticallyFull = bin.fillLevel >= 99;
     const card = document.createElement('div');
     card.className = `priority-card ${isCriticallyFull ? 'top-priority' : ''}`;
-    
+
     const loc = bin.location.toLowerCase();
     const isCriticalLoc = loc.includes('cafe') || loc.includes('main') || loc.includes('canteen');
-    
+
     card.innerHTML = `
       <div class="priority-rank">#${index + 1}</div>
       <div class="priority-info">
@@ -566,14 +566,14 @@ function renderPriorityList() {
     `;
     priorityContainer.appendChild(card);
   });
-  
+
   document.querySelectorAll('#priority-list .btn-clean').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const id = e.currentTarget.getAttribute('data-id');
       const binBtn = e.currentTarget;
       binBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
       binBtn.disabled = true;
-      updateBinFill(id, 0); 
+      updateBinFill(id, 0);
     });
   });
 }
@@ -591,16 +591,16 @@ let base64Image = null;
 
 if (uploadArea) {
   uploadArea.addEventListener('click', () => wasteImageUpload.click());
-  
+
   uploadArea.addEventListener('dragover', (e) => {
     e.preventDefault();
     uploadArea.classList.add('dragover');
   });
-  
+
   uploadArea.addEventListener('dragleave', () => {
     uploadArea.classList.remove('dragover');
   });
-  
+
   uploadArea.addEventListener('drop', (e) => {
     e.preventDefault();
     uploadArea.classList.remove('dragover');
@@ -608,7 +608,7 @@ if (uploadArea) {
       handleImageUpload(e.dataTransfer.files[0]);
     }
   });
-  
+
   wasteImageUpload.addEventListener('change', (e) => {
     if (e.target.files && e.target.files.length > 0) {
       handleImageUpload(e.target.files[0]);
@@ -637,17 +637,17 @@ function previewImage(file) {
   reader.readAsDataURL(file);
 }
 
-if(btnAnalyze) {
+if (btnAnalyze) {
   btnAnalyze.addEventListener('click', analyzeImage);
 }
 
 async function analyzeImage() {
   if (!uploadedFile) return;
-  
+
   btnAnalyze.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Analyzing image...';
   btnAnalyze.disabled = true;
   detectionResult.innerHTML = '';
-  
+
   try {
     const res = await fetch(`${API_BASE}/analyze-image`, {
       method: 'POST',
@@ -655,10 +655,10 @@ async function analyzeImage() {
       body: JSON.stringify({ filename: uploadedFile.name, image: base64Image })
     });
     const data = await res.json();
-    
+
     if (data.result) {
       displayResult(data.result);
-      
+
       // Save log to Firestore
       try {
         await addDoc(collection(db, 'detection_logs'), {
@@ -685,7 +685,7 @@ function displayResult(result) {
   const isWet = result === 'Wet Waste';
   const colorClass = isWet ? 'wet' : 'dry';
   const icon = isWet ? '<i class="fa-solid fa-water"></i>' : '♻️';
-  
+
   detectionResult.innerHTML = `
     <div class="result-badge ${colorClass}">
       <i class="fa-solid fa-circle-check"></i> 

@@ -20,7 +20,7 @@ app.post('/api/bins', async (req, res) => {
       status: 'Empty', // Empty, Moderate, Full
       createdAt: new Date().toISOString()
     };
-    
+
     const docRef = await db.collection('bins').add(newBin);
     res.status(201).json({ id: docRef.id, ...newBin });
   } catch (error) {
@@ -50,9 +50,9 @@ app.patch('/api/bins/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const { fillLevel, location, type } = req.body;
-    
+
     let updates = { updatedAt: new Date().toISOString() };
-    
+
     if (fillLevel !== undefined) {
       if (fillLevel < 0 || fillLevel > 100) {
         return res.status(400).json({ error: 'Valid fillLevel (0-100) is required' });
@@ -60,16 +60,16 @@ app.patch('/api/bins/:id', async (req, res) => {
       let status = 'Empty';
       if (fillLevel > 80) status = 'Full';
       else if (fillLevel > 30) status = 'Moderate';
-      
+
       updates.fillLevel = fillLevel;
       updates.status = status;
     }
-    
+
     if (location) updates.location = location;
     if (type) updates.type = type;
 
     await db.collection('bins').doc(id).update(updates);
-    
+
     const updatedBin = await db.collection('bins').doc(id).get();
     res.status(200).json({ id: updatedBin.id, ...updatedBin.data() });
   } catch (error) {
@@ -93,10 +93,10 @@ app.post('/api/analyze-image', async (req, res) => {
   try {
     const { filename } = req.body;
     if (!filename) return res.status(400).json({ error: 'Filename is missing' });
-    
+
     const nameData = filename.toLowerCase();
     let result = 'Dry Waste'; // default
-    
+
     // Keyword heuristics
     if (nameData.includes('food') || nameData.includes('banana') || nameData.includes('fruit') || nameData.includes('apple') || nameData.includes('wet') || nameData.includes('peel')) {
       result = 'Wet Waste';
@@ -106,10 +106,10 @@ app.post('/api/analyze-image', async (req, res) => {
       // Random fallback
       result = Math.random() > 0.5 ? 'Wet Waste' : 'Dry Waste';
     }
-    
+
     // Simulate real AI processing delay
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
+
     res.status(200).json({ result });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -119,4 +119,8 @@ app.post('/api/analyze-image', async (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+});
+
+app.get("/", (req, res) => {
+  res.send("API is running 🚀");
 });
