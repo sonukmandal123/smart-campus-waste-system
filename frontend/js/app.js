@@ -30,7 +30,7 @@ const btnAddBin = document.getElementById('btn-add-bin');
 const btnCloseModal = document.getElementById('btn-close-modal');
 const addBinForm = document.getElementById('add-bin-form');
 
-const API_BASE = 'https://smart-campus-waste-system.onrender.com';
+const API_BASE = 'https://smart-campus-waste-system.onrender.com/api';
 let currentUserRole = 'staff';
 let binsData = [];
 let fillInterval;
