@@ -4,12 +4,13 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, si
 import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB1nUfZ1j-WMyFHuubVOvQiAyXEuJGq-AI",
-  authDomain: "smart-campus-waste-syste-6f0c6.firebaseapp.com",
-  projectId: "smart-campus-waste-syste-6f0c6",
-  storageBucket: "smart-campus-waste-syste-6f0c6.firebasestorage.app",
-  messagingSenderId: "324227148516",
-  appId: "1:324227148516:web:11e70861f450ef370b1af1"
+  apiKey: "AIzaSyCevlLcpgWfnHhraL1eEY10ig9WoryQkew",
+  authDomain: "ecocampus---scms.firebaseapp.com",
+  projectId: "ecocampus---scms",
+  storageBucket: "ecocampus---scms.firebasestorage.app",
+  messagingSenderId: "929762190066",
+  appId: "1:929762190066:web:e0d4b6a87578765351e66b",
+  measurementId: "G-F4SW9T3YQ2"
 };
 
 // Initialize Firebase
