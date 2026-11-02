@@ -68,4 +68,4 @@ Make sure you have Node.js and a valid `serviceAccountKey.json` for Firebase Adm
 - **Data Simulation**: Once logged in, bins will passively and naturally simulate random filling increments iteratively every 5 seconds to accurately reflect physical use.
 - **Authentication Roles**: Sign up for an account via the interface. To test Administrative features (Adding, Editing, and Deleting bins natively), navigate physically into your Firestore Database, find your user `uid` inside the `users` collection, and change the `role` property string explicitly to `admin`!
 
-Enjoy your drastically cleaner, smarter campus! 🍃🌿
+Enjoy your drastically cleaner, smarter campus! 🍃
